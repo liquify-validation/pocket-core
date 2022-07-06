@@ -5,6 +5,7 @@ import (
 	sdk "github.com/pokt-network/pocket-core/types"
 	govTypes "github.com/pokt-network/pocket-core/x/gov/types"
 	"github.com/pokt-network/pocket-core/x/nodes/types"
+	"github.com/pokt-network/pocket-core/codec"
 )
 
 // RewardForRelays - Award coins to an address (will be called at the beginning of the next block)
@@ -17,7 +18,27 @@ func (k Keeper) RewardForRelays(ctx sdk.Ctx, relays sdk.BigInt, address sdk.Addr
 			return sdk.ZeroInt()
 		}
 	}
-	coins := k.RelaysToTokensMultiplier(ctx).Mul(relays)
+
+	var coins sdk.BigInt
+	//check if PIP22 is enabled, if so scale the rewards
+	if k.Cdc.IsAfterNamedFeatureActivationHeight(ctx.BlockHeight(), codec.RSCALKey) {
+		//grab stake
+		validator, found := k.GetValidator(ctx,address)
+		if !found {
+			ctx.Logger().Error(fmt.Errorf("no validator found for address %s; at height %d\n", address.String(), ctx.BlockHeight()).Error())
+			return sdk.ZeroInt()
+		}
+
+		stake := validator.GetTokens()
+		flooredStake := sdk.MinInt(stake.Sub(stake.Mod(k.RelaysToTokensMultiplier(ctx))),(k.RelaysToTokensMultiplier(ctx)))
+		Bin := flooredStake.Quo(k.ServicerStakeFloorMultiplier(ctx))
+		weight := Bin.Pow(k.ServicerStakeFloorMultiplierExponent(ctx)).Quo(k.ServicerStakeWeightMultiplier(ctx))
+		coins = k.RelaysToTokensMultiplier(ctx).Mul(relays).Mul(weight)
+	} else {
+		coins = k.RelaysToTokensMultiplier(ctx).Mul(relays)
+	}
+
+	
 	toNode, toFeeCollector := k.NodeReward(ctx, coins)
 	if toNode.IsPositive() {
 		k.mint(ctx, toNode, address)

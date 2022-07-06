@@ -96,27 +96,31 @@ func (k Keeper) RelaysToTokensMultiplier(ctx sdk.Ctx) sdk.BigInt {
 }
 
 // ServicerStakeFloorMultiplier - Retrieve ServicerStakeFloorMultiplier
-func (k Keeper) ServicerStakeFloorMultiplier(ctx sdk.Ctx) (res int64) {
-	k.Paramstore.Get(ctx, types.KeyServicerStakeFloorMultiplier, &res)
-	return
+func (k Keeper) ServicerStakeFloorMultiplier(ctx sdk.Ctx) sdk.BigInt{
+	var multiplier int64
+	k.Paramstore.Get(ctx, types.KeyServicerStakeFloorMultiplier, &multiplier)
+	return sdk.NewInt(multiplier)
 }
 
 // ServicerStakeWeightMultiplier - Retrieve ServicerStakeWeightMultiplier
-func (k Keeper) ServicerStakeWeightMultiplier(ctx sdk.Ctx) (res int64) {
-	k.Paramstore.Get(ctx, types.KeyServicerStakeWeightMultiplier, &res)
-	return
+func (k Keeper) ServicerStakeWeightMultiplier(ctx sdk.Ctx) sdk.BigInt{
+	var multiplier int64
+	k.Paramstore.Get(ctx, types.KeyServicerStakeWeightMultiplier, &multiplier)
+	return sdk.NewInt(multiplier)
 }
 
 // ServicerStakeWeightCeiling - Retrieve ServicerStakeWeightCeiling
-func (k Keeper) ServicerStakeWeightCeiling(ctx sdk.Ctx) (res int64) {
-	k.Paramstore.Get(ctx, types.KeyServicerStakeWeightCeiling, &res)
-	return
+func (k Keeper) ServicerStakeWeightCeiling(ctx sdk.Ctx) sdk.BigInt {
+	var multiplier int64
+	k.Paramstore.Get(ctx, types.KeyServicerStakeWeightCeiling, &multiplier)
+	return sdk.NewInt(multiplier)
 }
 
 // ServicerStakeFloorMultiplierExponent - Retrieve ServicerStakeFloorMultiplierExponent
-func (k Keeper) ServicerStakeFloorMultiplierExponent(ctx sdk.Ctx) (res int64) {
-	k.Paramstore.Get(ctx, types.KeyServicerStakeFloorMultiplierExponent, &res)
-	return
+func (k Keeper) ServicerStakeFloorMultiplierExponent(ctx sdk.Ctx) sdk.BigInt {
+	var multiplier int64
+	k.Paramstore.Get(ctx, types.KeyServicerStakeFloorMultiplierExponent, &multiplier)
+	return sdk.NewInt(multiplier)
 }
 
 func (k Keeper) NodeReward(ctx sdk.Ctx, reward sdk.BigInt) (nodeReward sdk.BigInt, feesCollected sdk.BigInt) {
@@ -174,10 +178,10 @@ func (k Keeper) GetParams(ctx sdk.Ctx) types.Params {
 		DowntimeJailDuration:     k.DowntimeJailDuration(ctx),
 		SlashFractionDoubleSign:  k.SlashFractionDoubleSign(ctx),
 		SlashFractionDowntime:    k.SlashFractionDowntime(ctx),
-		ServicerStakeFloorMultiplier: k.ServicerStakeFloorMultiplier(ctx),
-		ServicerStakeWeightMultiplier: k.ServicerStakeWeightMultiplier(ctx),
-		ServicerStakeWeightCeiling: k.ServicerStakeWeightCeiling(ctx),
-		ServicerStakeFloorMultiplierExponent: k.ServicerStakeFloorMultiplierExponent(ctx),
+		ServicerStakeFloorMultiplier: k.ServicerStakeFloorMultiplier(ctx).Int64(),
+		ServicerStakeWeightMultiplier: k.ServicerStakeWeightMultiplier(ctx).Int64(),
+		ServicerStakeWeightCeiling: k.ServicerStakeWeightCeiling(ctx).Int64(),
+		ServicerStakeFloorMultiplierExponent: k.ServicerStakeFloorMultiplierExponent(ctx).Int64(),
 	}
 }
 
