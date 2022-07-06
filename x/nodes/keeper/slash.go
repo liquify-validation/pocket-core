@@ -9,11 +9,26 @@ import (
 	"github.com/tendermint/tendermint/crypto"
 
 	sdk "github.com/pokt-network/pocket-core/types"
+	"github.com/pokt-network/pocket-core/codec"
 )
 
 // BurnForChallenge - Tries to remove coins from account & supply for a challenged validator
 func (k Keeper) BurnForChallenge(ctx sdk.Ctx, challenges sdk.BigInt, address sdk.Address) {
-	coins := k.RelaysToTokensMultiplier(ctx).Mul(challenges)
+	var coins sdk.BigInt
+	if k.Cdc.IsAfterNamedFeatureActivationHeight(ctx.BlockHeight(), codec.RSCALKey) {
+		validator, found := k.GetValidator(ctx,address)
+		if !found {
+			ctx.Logger().Error(fmt.Errorf("no validator found for address %s; at height %d\n", address.String(), ctx.BlockHeight()).Error())
+			return
+		}
+
+		stake := validator.GetTokens()
+		flooredStake := sdk.MinInt(stake.Sub(stake.Mod(k.ServicerStakeFloorMultiplier(ctx))),(k.ServicerStakeWeightCeiling(ctx)))
+		weight := flooredStake.Quo(k.ServicerStakeFloorMultiplier(ctx))
+		coins = k.RelaysToTokensMultiplier(ctx).Mul(challenges).Mul(weight)
+	} else {
+		coins = k.RelaysToTokensMultiplier(ctx).Mul(challenges)
+	}
 	k.simpleSlash(ctx, address, coins)
 }
 
