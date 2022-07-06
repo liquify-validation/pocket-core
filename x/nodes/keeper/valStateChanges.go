@@ -203,7 +203,7 @@ func (k Keeper) ValidateEditStake(ctx sdk.Ctx, currentValidator, newValidtor typ
 	}
 
 	if k.Cdc.IsAfterNamedFeatureActivationHeight(ctx.BlockHeight(), codec.RSCALKey) && k.Cdc.IsAfterNamedFeatureActivationHeight(ctx.BlockHeight(), codec.VEDITKey) {
-		//check that we are bumping up into t new bin or return error
+		//check that we are bumping up into a new bin or are above the cieling, if not return an error
 		if amount.LT(k.ServicerStakeWeightCeiling(ctx)) {
 			//grab the bin and check if we are in a new bin
 			flooredNewStake := amount.Sub(amount.Mod(k.ServicerStakeFloorMultiplier(ctx)))
