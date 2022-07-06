@@ -207,7 +207,7 @@ func (k Keeper) ValidateEditStake(ctx sdk.Ctx, currentValidator, newValidtor typ
 		if amount.LT(k.ServicerStakeWeightCeiling(ctx)) {
 			//grab the bin and check if we are in a new bin
 			flooredNewStake := amount.Sub(amount.Mod(k.ServicerStakeFloorMultiplier(ctx)))
-			if flooredNewStake.LT(currentValidator.StakedTokens) {
+			if flooredNewStake.LTE(currentValidator.StakedTokens) {
 				return types.ErrSameBinEditStake(k.codespace)
 			}
 		}
