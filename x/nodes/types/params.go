@@ -24,9 +24,9 @@ const (
 	DefaultDAOAllocation                  		= 10
 	DefaultMaxChains                      		= 15
 	DefaultMaxJailedBlocks                		= 1000
-	DefaultServicerStakeFloorMultiplier   int64	= 15000
+	DefaultServicerStakeFloorMultiplier   int64	= 15000000000
 	DefaultServicerStakeWeightMultiplier  int64	= 1
-	DefaultServicerStakeWeightCeiling     int64	= 15000
+	DefaultServicerStakeWeightCeiling     int64	= 15000000000
 	DefaultServicerStakeFloorMultiplierExponent int64 = 1
 )
 
