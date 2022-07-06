@@ -30,7 +30,7 @@ func (k Keeper) RewardForRelays(ctx sdk.Ctx, relays sdk.BigInt, address sdk.Addr
 		}
 
 		stake := validator.GetTokens()
-		flooredStake := sdk.MinInt(stake.Sub(stake.Mod(k.RelaysToTokensMultiplier(ctx))),(k.RelaysToTokensMultiplier(ctx)))
+		flooredStake := sdk.MinInt(stake.Sub(stake.Mod(k.ServicerStakeFloorMultiplier(ctx))),(k.ServicerStakeWeightCeiling(ctx)))
 		Bin := flooredStake.Quo(k.ServicerStakeFloorMultiplier(ctx))
 		weight := Bin.Pow(k.ServicerStakeFloorMultiplierExponent(ctx)).Quo(k.ServicerStakeWeightMultiplier(ctx))
 		coins = k.RelaysToTokensMultiplier(ctx).Mul(relays).Mul(weight)

@@ -12,6 +12,7 @@ import (
 
 	sdk "github.com/pokt-network/pocket-core/types"
 	"github.com/pokt-network/pocket-core/x/nodes/types"
+	"github.com/pokt-network/pocket-core/codec"
 )
 
 // UpdateTendermintValidators - Apply and return accumulated updates to the staked validator set
@@ -200,6 +201,19 @@ func (k Keeper) ValidateEditStake(ctx sdk.Ctx, currentValidator, newValidtor typ
 	if diff.IsNegative() {
 		return types.ErrMinimumEditStake(k.codespace)
 	}
+
+	if k.Cdc.IsAfterNamedFeatureActivationHeight(ctx.BlockHeight(), codec.RSCALKey) && k.Cdc.IsAfterNamedFeatureActivationHeight(ctx.BlockHeight(), codec.VEDITKey) {
+		//check that we are bumping up into t new bin or return error
+		if amount.LT(k.ServicerStakeWeightCeiling(ctx)) {
+			//grab the bin and check if we are in a new bin
+			flooredNewStake := amount.Sub(amount.Mod(k.ServicerStakeFloorMultiplier(ctx)))
+			if flooredNewStake.LT(currentValidator.StakedTokens) {
+				return types.ErrSameBinEditStake(k.codespace)
+			}
+		}
+	}
+
+
 	// if stake bump
 	if !diff.IsZero() {
 		// ensure account has enough coins for bump
