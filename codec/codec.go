@@ -43,6 +43,8 @@ const (
 	NonCustodialUpdateKey   = "NCUST"
 	TxCacheEnhancementKey   = "REDUP"
 	ReplayBurnKey           = "REPBR"
+	RSCALKey				= "RSCAL"
+	VEDITKey				= "VEDIT"
 )
 
 func GetCodecUpgradeHeight() int64 {
