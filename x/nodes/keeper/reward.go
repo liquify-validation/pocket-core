@@ -31,7 +31,7 @@ func (k Keeper) RewardForRelays(ctx sdk.Ctx, relays sdk.BigInt, address sdk.Addr
 
 		stake := validator.GetTokens()
 		//floorstake to the lowest bin multiple or take ceiling, whicherver is smaller
-		flooredStake := sdk.MinInt(stake.Sub(stake.Mod(k.ServicerStakeFloorMultiplier(ctx))),(k.ServicerStakeWeightCeiling(ctx).Sub(stake.Mod(k.ServicerStakeFloorMultiplier(ctx)))))
+		flooredStake := sdk.MinInt(stake.Sub(stake.Mod(k.ServicerStakeFloorMultiplier(ctx))),(k.ServicerStakeWeightCeiling(ctx).Sub(k.ServicerStakeWeightCeiling(ctx).Mod(k.ServicerStakeFloorMultiplier(ctx)))))
 		//Convert from tokens to a BIN number
 		Bin := flooredStake.Quo(k.ServicerStakeFloorMultiplier(ctx))
 		//calculate the weight value, weight will be a floatng point number so cast to DEC here and then truncate back to big int
