@@ -25,37 +25,37 @@ const (
 	DefaultMaxChains                      		= 15
 	DefaultMaxJailedBlocks                		= 1000
 	DefaultServicerStakeFloorMultiplier   int64	= 15000000000
-	DefaultServicerStakeWeightMultiplier  int64	= 1
 	DefaultServicerStakeWeightCeiling     int64	= 15000000000
-	DefaultServicerStakeFloorMultiplierExponent int64 = 1
 )
 
 //  - Keys for parameter access
 var (
-	KeyUnstakingTime               			= []byte("UnstakingTime")
-	KeyMaxValidators               			= []byte("MaxValidators")
-	KeyStakeDenom                  			= []byte("StakeDenom")
-	KeyStakeMinimum                			= []byte("StakeMinimum")
-	KeyMaxEvidenceAge              			= []byte("MaxEvidenceAge")
-	KeySignedBlocksWindow          			= []byte("SignedBlocksWindow")
-	KeyMinSignedPerWindow          			= []byte("MinSignedPerWindow")
-	KeyDowntimeJailDuration        			= []byte("DowntimeJailDuration")
-	KeySlashFractionDoubleSign     			= []byte("SlashFractionDoubleSign")
-	KeySlashFractionDowntime       			= []byte("SlashFractionDowntime")
-	KeyRelaysToTokensMultiplier    			= []byte("RelaysToTokensMultiplier")
-	KeySessionBlock                			= []byte("BlocksPerSession")
-	KeyDAOAllocation               			= []byte("DAOAllocation")
-	KeyProposerAllocation          			= []byte("ProposerPercentage")
-	KeyMaxChains                   			= []byte("MaximumChains")
-	KeyMaxJailedBlocks             			= []byte("MaxJailedBlocks")
+	KeyUnstakingTime               				= []byte("UnstakingTime")
+	KeyMaxValidators               				= []byte("MaxValidators")
+	KeyStakeDenom                  				= []byte("StakeDenom")
+	KeyStakeMinimum                				= []byte("StakeMinimum")
+	KeyMaxEvidenceAge              				= []byte("MaxEvidenceAge")
+	KeySignedBlocksWindow          				= []byte("SignedBlocksWindow")
+	KeyMinSignedPerWindow          				= []byte("MinSignedPerWindow")
+	KeyDowntimeJailDuration        				= []byte("DowntimeJailDuration")
+	KeySlashFractionDoubleSign     				= []byte("SlashFractionDoubleSign")
+	KeySlashFractionDowntime       				= []byte("SlashFractionDowntime")
+	KeyRelaysToTokensMultiplier    				= []byte("RelaysToTokensMultiplier")
+	KeySessionBlock                				= []byte("BlocksPerSession")
+	KeyDAOAllocation               				= []byte("DAOAllocation")
+	KeyProposerAllocation          				= []byte("ProposerPercentage")
+	KeyMaxChains                   				= []byte("MaximumChains")
+	KeyMaxJailedBlocks             				= []byte("MaxJailedBlocks")
 	KeyServicerStakeFloorMultiplier 			= []byte("ServicerStakeFloorMultiplier")
-	KeyServicerStakeWeightMultiplier 		= []byte("ServicerStakeWeightMultiplier")
-	KeyServicerStakeWeightCeiling 			= []byte("ServicerStakeWeightCeiling")
-	KeyServicerStakeFloorMultiplierExponent 	= []byte("ServicerStakeFloorMultiplierExponent")
-	DoubleSignJailEndTime          			= time.Unix(253402300799, 0) // forever
-	DefaultMinSignedPerWindow      			= sdk.NewDecWithPrec(5, 1)
-	DefaultSlashFractionDoubleSign 			= sdk.NewDec(1).Quo(sdk.NewDec(20))
-	DefaultSlashFractionDowntime   			= sdk.NewDec(1).Quo(sdk.NewDec(100))
+	KeyServicerStakeWeightMultiplier 			= []byte("ServicerStakeWeightMultiplier")
+	KeyServicerStakeWeightCeiling 				= []byte("ServicerStakeWeightCeiling")
+	KeyServicerStakeFloorMultiplierExponent 	= []byte("ServicerStakeFloorMultiplerExponent")
+	DefaultServicerStakeWeightMultiplier 		= sdk.NewDec(1)
+	DefaultServicerStakeFloorMultiplierExponent = sdk.NewDec(1)
+	DoubleSignJailEndTime          				= time.Unix(253402300799, 0) // forever
+	DefaultMinSignedPerWindow      				= sdk.NewDecWithPrec(5, 1)
+	DefaultSlashFractionDoubleSign 				= sdk.NewDec(1).Quo(sdk.NewDec(20))
+	DefaultSlashFractionDowntime   				= sdk.NewDec(1).Quo(sdk.NewDec(100))
 )
 
 var _ sdk.ParamSet = (*Params)(nil)
@@ -79,9 +79,9 @@ type Params struct {
 	SlashFractionDoubleSign  sdk.BigDec    `json:"slash_fraction_double_sign" yaml:"slash_fraction_double_sign"` // the factor of which a node is slashed for a double sign
 	SlashFractionDowntime    sdk.BigDec    `json:"slash_fraction_downtime" yaml:"slash_fraction_downtime"`       // the factor of which a node is slashed for missing blocks
 	ServicerStakeFloorMultiplier int64	   `json:"servicer_stake_floor_multipler" yaml:"servicer_stake_floor_multipler"`
-	ServicerStakeWeightMultiplier int64 `json:"servicer_stake_weight_multipler" yaml:"servicer_stake_weight_multipler"`
+	ServicerStakeWeightMultiplier sdk.BigDec `json:"servicer_stake_weight_multipler" yaml:"servicer_stake_weight_multipler"`
 	ServicerStakeWeightCeiling int64 `json:"servicer_stake_weight_ceiling" yaml:"servicer_stake_weight_cieling"`
-	ServicerStakeFloorMultiplierExponent int64 `json:"servicer_stake_floor_multiplier_exponent" yaml:"servicer_stake_floor_multiplier_exponent"`
+	ServicerStakeFloorMultiplierExponent sdk.BigDec `json:"servicer_stake_floor_multiplier_exponent" yaml:"servicer_stake_floor_multiplier_exponent"`
 }
 
 // Implements sdk.ParamSet

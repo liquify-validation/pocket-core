@@ -103,10 +103,9 @@ func (k Keeper) ServicerStakeFloorMultiplier(ctx sdk.Ctx) sdk.BigInt{
 }
 
 // ServicerStakeWeightMultiplier - Retrieve ServicerStakeWeightMultiplier
-func (k Keeper) ServicerStakeWeightMultiplier(ctx sdk.Ctx) sdk.BigInt{
-	var multiplier int64
-	k.Paramstore.Get(ctx, types.KeyServicerStakeWeightMultiplier, &multiplier)
-	return sdk.NewInt(multiplier)
+func (k Keeper) ServicerStakeWeightMultiplier(ctx sdk.Ctx)(res sdk.BigDec) {
+	k.Paramstore.Get(ctx, types.KeyServicerStakeWeightMultiplier, &res)
+	return
 }
 
 // ServicerStakeWeightCeiling - Retrieve ServicerStakeWeightCeiling
@@ -117,11 +116,11 @@ func (k Keeper) ServicerStakeWeightCeiling(ctx sdk.Ctx) sdk.BigInt {
 }
 
 // ServicerStakeFloorMultiplierExponent - Retrieve ServicerStakeFloorMultiplierExponent
-func (k Keeper) ServicerStakeFloorMultiplierExponent(ctx sdk.Ctx) sdk.BigInt {
-	var multiplier int64
-	k.Paramstore.Get(ctx, types.KeyServicerStakeFloorMultiplierExponent, &multiplier)
-	return sdk.NewInt(multiplier)
+func (k Keeper) ServicerStakeFloorMultiplierExponent(ctx sdk.Ctx)(res sdk.BigDec) {
+	k.Paramstore.Get(ctx, types.KeyServicerStakeFloorMultiplierExponent, &res)
+	return
 }
+
 
 func (k Keeper) NodeReward(ctx sdk.Ctx, reward sdk.BigInt) (nodeReward sdk.BigInt, feesCollected sdk.BigInt) {
 	// convert reward to dec
@@ -179,11 +178,12 @@ func (k Keeper) GetParams(ctx sdk.Ctx) types.Params {
 		SlashFractionDoubleSign:  k.SlashFractionDoubleSign(ctx),
 		SlashFractionDowntime:    k.SlashFractionDowntime(ctx),
 		ServicerStakeFloorMultiplier: k.ServicerStakeFloorMultiplier(ctx).Int64(),
-		ServicerStakeWeightMultiplier: k.ServicerStakeWeightMultiplier(ctx).Int64(),
+		ServicerStakeWeightMultiplier: k.ServicerStakeWeightMultiplier(ctx),
 		ServicerStakeWeightCeiling: k.ServicerStakeWeightCeiling(ctx).Int64(),
-		ServicerStakeFloorMultiplierExponent: k.ServicerStakeFloorMultiplierExponent(ctx).Int64(),
+		ServicerStakeFloorMultiplierExponent: k.ServicerStakeFloorMultiplierExponent(ctx),
 	}
 }
+
 
 // SetParams - Apply set of params
 func (k Keeper) SetParams(ctx sdk.Ctx, params types.Params) {

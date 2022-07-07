@@ -26,7 +26,7 @@ func (k Keeper) BurnForChallenge(ctx sdk.Ctx, challenges sdk.BigInt, address sdk
 
 		stake := validator.GetTokens()
 		//floorstake to the lowest bin multiple or take ceiling, whicherver is smaller
-		flooredStake := sdk.MinInt(stake.Sub(stake.Mod(k.ServicerStakeFloorMultiplier(ctx))),(k.ServicerStakeWeightCeiling(ctx)))
+		flooredStake := sdk.MinInt(stake.Sub(stake.Mod(k.ServicerStakeFloorMultiplier(ctx))),(k.ServicerStakeWeightCeiling(ctx).Sub(stake.Mod(k.ServicerStakeFloorMultiplier(ctx)))))
 		//Convert from tokens to a BIN number
 		Bin := flooredStake.Quo(k.ServicerStakeFloorMultiplier(ctx))
 		//calculate the weight value
